@@ -6,6 +6,8 @@ const {join} = require('path')
 const mongoose = require('mongoose');
 const userServices = require('./src/services/users/index');
 const postRouter = require('./src/services/posts/')
+const authRouter = require('./src/services/auth')
+const {basic} = require('./src/middlewares/auth')
 dotenv.config();
 
 const PORT = process.env.PORT || 4000
@@ -14,7 +16,9 @@ app.use(express.json())
 app.use(cors())
 app.use("/posts", express.static(join(__dirname, './public/posts/')))
 app.use('/users', userServices);
-app.use('/api/posts', postRouter)
+app.use('/api/posts',basic, postRouter)
+app.use('/api/auth', authRouter)
+
 
 app.listen(PORT ,()=>{
     console.log(`server active on port ${PORT}`);
