@@ -16,7 +16,7 @@ app.use(express.json())
 app.use(cors())
 app.use("/posts", express.static(join(__dirname, './public/posts/')))
 app.use('/users', userServices);
-app.use('/api/posts',basic, postRouter)
+app.use('/api/posts', postRouter)
 app.use('/api/auth', authRouter)
 
 
