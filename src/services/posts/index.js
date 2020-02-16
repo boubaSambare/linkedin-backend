@@ -3,7 +3,7 @@ const {
 } = require('express')
 const router = Router()
 const posts = require('../models/posts')
-const users = require('../models/users')
+const users = require('../models/profiles')
 const {
     ObjectId
 } = require('mongodb')
@@ -32,6 +32,7 @@ const upload = multer({
  */
 router.get("/", async (req, res) => {
     try {
+        console.log(req.headers)
         let request = await posts.find({})
         res.status(200).send(request)
     } catch (error) {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const user = require('../models/users/index');
+const user = require('../models/profiles/index');
 const pdfGenerator = require("../../pdf/pdfgenerator")
 const path = require("path")
 const json2csv = require("json2csv").parse

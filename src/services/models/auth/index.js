@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const passportLocalMongoose = require('passport-local-mongoose')
 
 const authSchema = new mongoose.Schema({
+    
 
 })
 

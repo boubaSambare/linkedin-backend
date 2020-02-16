@@ -1,5 +1,5 @@
 const basicAuth = require('express-basic-auth')
-const User = require('../../services/auth')
+const User = require('../../services/models/auth')
 const atob = require('atob')
 
 const checkUser = async (username, password, cb) => {

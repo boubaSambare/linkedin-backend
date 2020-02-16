@@ -1,7 +1,7 @@
 const {Schema } = require('mongoose')
 
 const likesShema = new Schema({
-    user: {
+    username: {
         type: String,
         required: true,
         unique: true
