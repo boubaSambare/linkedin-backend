@@ -34,7 +34,7 @@ var corsOptions = {
     }
 };
 
-mongoose.connect("mongodb://127.0.0.1:27017/linkedindb", {
+mongoose.connect(process.env.MONGO_DB, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useFindAndModify: true
