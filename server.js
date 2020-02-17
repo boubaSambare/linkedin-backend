@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const dotenv = require ('dotenv');
+const passport = require('passport')
 const cors = require('cors')
 const {join} = require('path')
 const mongoose = require('mongoose');
@@ -13,9 +14,10 @@ dotenv.config();
 const PORT = process.env.PORT || 4000
 
 app.use(express.json())
+app.use(passport.initialize())
 app.use(cors())
 app.use("/posts", express.static(join(__dirname, './public/posts/')))
-app.use('/users', userServices);
+app.use('/api/profiles', userServices);
 app.use('/api/posts',basic, postRouter)
 app.use('/api/auth', authRouter)
 

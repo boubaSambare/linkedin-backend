@@ -1,7 +1,8 @@
 const {
     Router
 } = require('express')
-const router = Router()
+const router = Router()ù
+const passport = require('passport')
 const posts = require('../models/posts')
 const users = require('../models/profiles')
 const {
@@ -40,7 +41,7 @@ router.get("/", async (req, res) => {
     }
 })
 
-router.post("/", async (req, res) => {
+router.post("/",passport.authenticate('jwt'), async (req, res) => {
     try {
         const request = await posts.create(req.body)
         request.save()

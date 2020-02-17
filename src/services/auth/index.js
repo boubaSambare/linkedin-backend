@@ -1,4 +1,6 @@
-const {Router} = require('express')
+const { Router } = require('express')
+const passport = require('passport')
+const { generateToken } = require('../../middlewares/token-auth')
 const Auth = require('../models/auth')
 const router = Router()
 
@@ -13,9 +15,28 @@ router.get("/", async (req, res) => {
 router.post("/register", async (req, res) => {
     try {
         const user = await Auth.register(req.body, req.body.password)
-        res.send(user)
+        const token = generateToken({ _id: user._id, username: user.username, email: user.email })
+        res.send({ access_token: token, username: user.username })
     } catch (error) {
-        res.status(500).send(error)
+        res.status(500).send(error.message)
+    }
+})
+
+router.post("/login", passport.authenticate('local'), async (req, res) => {
+    try {
+        const token = generateToken({ _id: req.user._id, username: user.username })
+        res.send({ access_token: token, username: req.user.username })
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+})
+
+router.post("/refresh", passport.authenticate('jwt'), async (req, res) => {
+    try {
+        const token = generateToken({ _id: req.user._id, username: user.username })
+        res.send({ access_token: token, username: req.user.username })
+    } catch (error) {
+        res.status(500).send(error.message)
     }
 })
 
