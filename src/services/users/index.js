@@ -24,6 +24,15 @@ router.get('/:id', async (req, res) => {
     res.send(result);
 })
 
+router.get('/me', async (req, res) => {
+    try {
+        const result = await user.find({ username: req.user.username });
+        res.send(result);
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+})
+
 //POST user
 router.post('/', async (req, res) => {
     try {

@@ -17,15 +17,15 @@ app.use(express.json())
 app.use(passport.initialize())
 app.use(cors())
 app.use("/posts", express.static(join(__dirname, './public/posts/')))
-app.use('/api/profiles', userServices);
-app.use('/api/posts',basic, postRouter)
+app.use('/api/profiles',passport.authenticate('jwt'), userServices);
+app.use('/api/posts',passport.authenticate('jwt'), postRouter)
 app.use('/api/auth', authRouter)
 
 
 app.listen(PORT ,()=>{
     console.log(`server active on port ${PORT}`);
 
-const whitelist = ["http://localhost:5000"];
+const whitelist = ["http://localhost:5000",process.env.CORS_URL];
 var corsOptions = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin) !== -1 || !origin) {

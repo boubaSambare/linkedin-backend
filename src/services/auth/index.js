@@ -4,7 +4,7 @@ const { generateToken } = require('../../middlewares/token-auth')
 const Auth = require('../models/auth')
 const router = Router()
 
-router.get("/", async (req, res) => {
+router.get("/", passport.authenticate('jwt'), async (req, res) => {
     try {
         res.send(await Auth.find({}))
     } catch (error) {
