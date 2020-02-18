@@ -8,8 +8,8 @@ const mongoose = require('mongoose');
 const userServices = require('./src/services/users/index');
 const postRouter = require('./src/services/posts/')
 const authRouter = require('./src/services/auth')
-const {basic} = require('./src/middlewares/auth')
 dotenv.config();
+const auth = require('./src/middlewares/token-auth')
 
 const PORT = process.env.PORT || 4000
 
