@@ -5,28 +5,23 @@ const router = Router()
 const passport = require('passport')
 const posts = require('../models/posts')
 const users = require('../models/profiles')
-const {
-    ObjectId
-} = require('mongodb')
+const dotenv = require('dotenv')
+const { ObjectId} = require('mongodb')
 const multer = require('multer')
-const {
-    extname,
-    join
-} = require('path')
+const MulterAzureStorage = require("multer-azure-storage")
+const {extname,join} = require('path')
+dotenv.config()
 
 //Multer storage configuration
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, join(__dirname, '../../../public/posts/'))
-    },
-    filename: (req, file, cb) => {
-        cb(null, `${req.params.postId}${extname(file.originalname)}`)
-    }
-})
-
 const upload = multer({
-    storage: storage
-})
+    storage: new MulterAzureStorage({
+      azureStorageConnectionString: process.env.AZURE_STRINGS,
+      containerName: 'images',
+      containerSecurity: 'blob',
+    })
+  })
+
+
 
 /**
  * Posts 
@@ -111,6 +106,7 @@ router.delete("/:postId", async (req, res) => {
  */
 router.post("/:postId", upload.single('posts'), async (req, res, next) => {
     try {
+        console.log(req.file)
         let request = await posts.find({
             _id: req.params.postId
         })
@@ -119,13 +115,10 @@ router.post("/:postId", upload.single('posts'), async (req, res, next) => {
         if (!req.file)
             return res.status(500).send('select an image')
 
-        let fileName = `${req.params.postId}${extname(req.file.originalname)}`
-        let imageUrl = `${req.protocol}://${req.get('host')}/posts/${fileName}`
-        req.body.image = imageUrl
         let updateRequest = await posts.findOneAndUpdate({
             _id: req.params.postId
         }, {
-            ...req.body
+            image:req.file.url
         }, {
             new: true
         })
