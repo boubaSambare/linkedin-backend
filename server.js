@@ -1,13 +1,13 @@
 const express = require('express');
 const app = express();
-const dotenv = require ('dotenv');
 const passport = require('passport')
 const cors = require('cors')
 const {join} = require('path')
 const mongoose = require('mongoose');
-const userServices = require('./src/services/users/index');
-const postRouter = require('./src/services/posts/')
-const authRouter = require('./src/services/auth')
+const userServices = require('./src/services/routes/users/index');
+const postRouter = require('./src/services/routes/posts')
+const authRouter = require('./src/services/routes/auth')
+const dotenv = require ('dotenv');
 dotenv.config();
 const auth = require('./src/middlewares/token-auth')
 

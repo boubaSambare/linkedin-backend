@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const user = require('../models/profiles/index');
-const pdfGenerator = require("../../pdf/pdfgenerator")
+const user = require('../../models/profiles/index');
+const pdfGenerator = require("../../../pdf/pdfgenerator")
 const path = require("path")
 const json2csv = require("json2csv").parse
 const fs = require("fs-extra")
-const {
-    ObjectId
-} = require('mongodb');
+const {ObjectId} = require('mongodb');
+const {upload} = require('../../../middlewares/upload')
 
 //USER
 //GET all users
@@ -49,9 +48,29 @@ router.post('/', async (req, res) => {
 
 
 //POST image for users Multer
-// router.post('/:id/images',(req,res)=>{
+router.post('/:username/picture',upload.single('profile'),async (req,res)=>{
+    try {
+        console.log(req.file)
+        const request = await user.find({username:req.params.username});
+        if (!request.length > 0)
+            return res.status(404).send('POST NOT FOUND')
+        if (!req.file)
+            return res.status(500).send('select an image')
 
-// })
+        let updateRequest = await user.findOneAndUpdate({
+            username: req.params.username
+        }, {
+            image:req.file.url
+        }, {
+            new: true
+        })
+
+        res.send(updateRequest)
+
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+})
 
 router.put('/:id', async (req, res) => {
     try {
@@ -158,6 +177,36 @@ router.delete('/:id/experience/:expid', async (req, res) => {
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
+    }
+})
+
+/**
+ * upload experience picture
+ */
+router.post('/:username/experience/:expid/picture',upload.single('experience'),async (req,res)=>{
+    try {
+        const request = await user.findOne({
+            username:  req.params.username,
+            "experience._id": new ObjectId(req.params.expid)
+        }, {
+            "experience.$": 1
+        })
+        if (!request.length > 0)
+            return res.status(404).send('POST NOT FOUND')
+        if (!req.file)
+            return res.status(500).send('select an image')
+        let newImage = {
+            image: req.file.url
+        }
+        const experience = await user.findOneAndUpdate({
+            username:  req.params.username,
+            "experience._id": new ObjectId(req.params.expid)
+        }, {
+            "experience.$": newImage
+        }, {new: true})
+        res.send(experience);
+    } catch (error) {
+        res.status(500).send(error.message)
     }
 })
 

@@ -3,23 +3,11 @@ const {
 } = require('express')
 const router = Router()
 const passport = require('passport')
-const posts = require('../models/posts')
-const users = require('../models/profiles')
-const dotenv = require('dotenv')
+const posts = require('../../models/posts')
+const users = require('../../models/profiles')
 const { ObjectId} = require('mongodb')
-const multer = require('multer')
-const MulterAzureStorage = require("multer-azure-storage")
 const {extname,join} = require('path')
-dotenv.config()
-
-//Multer storage configuration
-const upload = multer({
-    storage: new MulterAzureStorage({
-      azureStorageConnectionString: process.env.AZURE_STRINGS,
-      containerName: 'images',
-      containerSecurity: 'blob',
-    })
-  })
+const {upload} = require('../../../middlewares/upload')
 
 
 
