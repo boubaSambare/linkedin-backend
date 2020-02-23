@@ -58,14 +58,14 @@ router.post('/', async (req, res) => {
 router.post('/:username/picture', upload.single('profile'), async (req, res) => {
     try {
         console.log(req.file)
-        const request = await user.find({ username: req.params.username });
+        const request = await user.find({ userName: req.params.username });
         if (!request.length > 0)
-            return res.status(404).send('POST NOT FOUND')
+            return res.status(404).send('USER NOT FOUND')
         if (!req.file)
             return res.status(500).send('select an image')
 
         let updateRequest = await user.findOneAndUpdate({
-            username: req.params.username
+            userName: req.params.username
         }, {
             image: req.file.url
         }, {
@@ -207,7 +207,7 @@ router.post('/:username/experience/:expid/picture', upload.single('experience'),
         if (req.params.username !== req.user.username)
             throw new Error(`unauthorized please login or register with your username ${req.params.username}`)
         const request = await user.findOne({
-            username: req.params.username,
+            userName: req.params.username,
             "experience._id": new ObjectId(req.params.expid)
         }, {
             "experience.$": 1
@@ -220,7 +220,7 @@ router.post('/:username/experience/:expid/picture', upload.single('experience'),
             image: req.file.url
         }
         const experience = await user.findOneAndUpdate({
-            username: req.params.username,
+            userName: req.params.username,
             "experience._id": new ObjectId(req.params.expid)
         }, {
             "experience.$": newImage
