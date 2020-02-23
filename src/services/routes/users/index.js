@@ -11,9 +11,20 @@ const { upload } = require('../../../middlewares/upload')
 //USER
 //GET all users
 router.get('/', async (req, res) => {
-    const results = await user.find({});
-    console.log('Fetching data');
-    res.send(results);
+    try {
+        if (req.query.username) {
+            let request = await user.find({ userName: req.query.username })
+            if (!request.length>0)
+                return res.status(404).send('not found')
+            res.send(request)
+        }
+        const results = await user.find({});
+        console.log('Fetching data');
+        res.send(results);
+    } catch (error) {
+
+    }
+
 })
 
 //GET user by id
@@ -73,11 +84,11 @@ router.put('/', async (req, res) => {
         if (req.params.username !== req.user.username)
             throw new Error(`unauthorized please login or register with your username ${req.params.username}`)
         delete req.body._id;
-        const edited = await user.findOneAndUpdate({userName:req.user.username}, {
+        const edited = await user.findOneAndUpdate({ userName: req.user.username }, {
             $set: {
                 ...req.body
             }
-        },{new:true});
+        }, { new: true });
         if (edited) {
             res.send(edited);
         } else {
@@ -92,7 +103,7 @@ router.delete('/', async (req, res) => {
     try {
         if (req.params.username !== req.user.username)
             throw new Error(`unauthorized please login or register with your username ${req.params.username}`)
-        const deleted = await user.findOneAndDelete({userName:req.user.username},{new:true});
+        const deleted = await user.findOneAndDelete({ userName: req.user.username }, { new: true });
         if (deleted) {
             res.send(deleted);
         } else {
@@ -244,7 +255,7 @@ router.get('/:username/csv', async (req, res) => {
     try {
         if (req.params.username !== req.user.username)
             throw new Error(`unauthorized please login or register with your username ${req.params.username}`)
-        const response = await user.find({userName:req.params.username})
+        const response = await user.find({ userName: req.params.username })
         const fields = ["role", "company", "area"]
         const opts = {
             fields
