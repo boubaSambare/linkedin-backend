@@ -58,15 +58,7 @@ const userSchema = new mongoose.Schema({
     image:{
         type: String,
         default: "https://soulcore.com/wp-content/uploads/2018/01/profile-placeholder.png"
-    },
-    createdAt:{
-        type: Date,
-        default: Date.now()
-    },
-    updatedAt:{
-        type: Date,
-        default: Date.now()
-    },
+    }
 }, {
     timestamps: true
 })

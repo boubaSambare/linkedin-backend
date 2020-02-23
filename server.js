@@ -4,6 +4,7 @@ const passport = require('passport')
 const cors = require('cors')
 const {join} = require('path')
 const mongoose = require('mongoose');
+const listEndpoints = require('express-list-endpoints')
 const userServices = require('./src/services/routes/users/index');
 const postRouter = require('./src/services/routes/posts')
 const authRouter = require('./src/services/routes/auth')
@@ -35,6 +36,9 @@ var corsOptions = {
         }
     }
 };
+
+// lists endpoints
+console.log(listEndpoints(app))
 
 mongoose.connect(process.env.MONGO_DB, {
         useNewUrlParser: true,

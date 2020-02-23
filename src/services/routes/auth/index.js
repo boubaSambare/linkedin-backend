@@ -24,7 +24,7 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", passport.authenticate('local'), async (req, res) => {
     try {
-        console.log(req.user)
+       
         const token = generateToken({ _id: req.user._id, username: req.user.username })
         res.send({ access_token: token, username: req.user.username })
     } catch (error) {
